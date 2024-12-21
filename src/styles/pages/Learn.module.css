@@ -12,6 +12,7 @@
   width: 100%;
   overflow-x: scroll;
   display: flex;
+  gap: 20px;
 }
 
 .slider::-webkit-scrollbar {

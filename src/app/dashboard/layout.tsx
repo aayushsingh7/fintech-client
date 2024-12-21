@@ -10,9 +10,10 @@ import { TiHomeOutline } from "react-icons/ti";
 import { TbCashRegister, TbMoneybag } from "react-icons/tb";
 import { LuBookOpenText } from "react-icons/lu";
 import { IoBarChartOutline } from "react-icons/io5";
-
+import AddRecord from '@/layouts/AddRecord';
 
 import styles from "../../styles/layout/DashboardLayout.module.css";
+import { useAppContext } from '@/context/AppContext';
 // import { handleUserData } from '@/redux/slice/userSlice';
 // import { useDispatch } from 'react-redux';
 
@@ -26,7 +27,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
     // useEffect(() => {
     //     authenticateUser()
     // }, [])
-
+    const { createRecord } = useAppContext()
     const authenticateUser = async () => {
         try {
             const user = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/auth`, {
@@ -45,7 +46,9 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
 
     return (
         <div className={styles.page}>
-
+            {
+                createRecord && <AddRecord />
+            }
             <nav className={styles.container}>
                 <h3>AppName</h3>
                 <div className={styles.split_children}>

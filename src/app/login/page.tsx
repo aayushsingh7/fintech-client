@@ -1,15 +1,19 @@
 "use client"
 
+
+
 import { FC, useState } from 'react'
 import styles from '@/styles/pages/LoginRegister.module.css'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useAppContext } from '@/context/AppContext'
 
 interface LoginPageProps { }
 
 const LoginPage: FC<LoginPageProps> = ({ }) => {
+    const { setUser } = useAppContext()
     const router = useRouter()
     const [userDetails, setUserDetails] = useState<any>({
         email: "",
@@ -37,6 +41,7 @@ const LoginPage: FC<LoginPageProps> = ({ }) => {
                 })
             })
             let response = await loginUser.json()
+            setUser(response.user)
             router.push("/dashboard")
             console.log(response)
         } catch (err) {

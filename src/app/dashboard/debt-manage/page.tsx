@@ -1,18 +1,23 @@
+"use client"
+
+
 import { FC } from 'react'
 import styles from "../../../styles/pages/DebtManage.module.css"
 import Page from '@/components/Page'
 import PageHeader from '@/layouts/PageHeader'
 import Button from '@/components/ui/Button'
 import ChartWithCustomAxisColors from '@/components/charts/LineChart'
+import { useAppContext } from '@/context/AppContext'
 
 interface DebtManageProps {
 
 }
 
 const DebtManage: FC<DebtManageProps> = ({ }) => {
+    const { setCreateRecord, setRecordType } = useAppContext()
     return (
         <Page>
-            <PageHeader heading='Debt Management'> <Button style={{ padding: "10px 20px", background: "var(--active-background)", fontSize: "0.8rem", borderRadius: "10px" }}>Start a New Plan</Button></PageHeader>
+            <PageHeader heading='Debt Management'> <Button onClick={() => { setCreateRecord(true); setRecordType("debt") }} style={{ padding: "10px 20px", background: "var(--active-background)", fontSize: "0.8rem", borderRadius: "10px" }}>Start a New Plan</Button></PageHeader>
             <section className={styles.container}>
                 <h2>Current Plan(s)</h2>
                 <div className={styles.slider}>

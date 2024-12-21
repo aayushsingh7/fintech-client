@@ -100,3 +100,13 @@
   justify-content: center;
   z-index: 100;
 }
+
+.income_select {
+  color: #00da00;
+  border: 2px solid #00da00;
+}
+
+.expense_select {
+  color: #ff0000;
+  border: 2px solid #ff0000;
+}
