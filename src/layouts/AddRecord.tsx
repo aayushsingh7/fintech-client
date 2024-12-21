@@ -17,7 +17,7 @@ function getMonthEndDate() {
 }
 
 const AddRecord: FC<AddRecordProps> = ({ }) => {
-    const { setCreateRecord, recordType } = useAppContext()
+    const { setCreateRecord, recordType, user } = useAppContext()
     const [type, setType] = useState<string>("income")
     const [recordDetails, setRecordDetails] = useState<any>({
         title: "",
@@ -49,18 +49,23 @@ const AddRecord: FC<AddRecordProps> = ({ }) => {
         const data = recordType == "debt" ? {
             title: recordDetails.title,
             annualIncome: Number(recordDetails.annualIncome),
-            recordType: type,
+            recordType: "debt",
             repaymentPeroid: Number(recordDetails.repaymentPeroid),
             month: recordDetails.month,
             paidSoFar: Number(recordDetails.paidSoFar),
             expensePerMonth: Number(recordDetails.expensePerMonth),
             savings: Number(recordDetails.savings),
             amountToBePayedPerMonth: 100,
+            totalDebt: Number(recordDetails.totalDebt),
+            currentDebtPaymentPerMonth: Number(recordDetails.currentDebtPaymentPerMonth),
+            user: user._id,
+            interest:Number(recordDetails.interest)
         } : {
             title: recordDetails.title,
             description: recordDetails.description,
             amount: Number(recordDetails.amount),
             recordType: type,
+            user: user._id,
             month: recordDetails.month
         }
 
@@ -100,6 +105,10 @@ const AddRecord: FC<AddRecordProps> = ({ }) => {
                             <>
 
                                 {/* <Input onChange={(e) => handleUserInput(e)} name="" inputStyleDark='none' type='text' placeholder='Enter Total Debt Amount' style={{ background: "#222222", borderRadius: "10px", width: "100%", fontSize: "0.7rem", marginBottom: "15px", padding: "15px" }} /> */}
+
+                                <Input onChange={(e) => handleUserInput(e)} name="totalDebt" inputStyleDark='none' type='text' placeholder='Enter Total Debt' style={{ background: "#222222", borderRadius: "10px", width: "100%", fontSize: "0.7rem", marginBottom: "15px", padding: "15px" }} />
+
+                                <Input onChange={(e) => handleUserInput(e)} name="currentDebtPaymentPerMonth" inputStyleDark='none' type='text' placeholder='Enter Current Debt Amount Pay Per Month' style={{ background: "#222222", borderRadius: "10px", width: "100%", fontSize: "0.7rem", marginBottom: "15px", padding: "15px" }} />
 
 
                                 <Input onChange={(e) => handleUserInput(e)} name="repaymentPeroid" inputStyleDark='none' type='text' placeholder='Enter Repayment Period' style={{ background: "#222222", borderRadius: "10px", width: "100%", fontSize: "0.7rem", marginBottom: "15px", padding: "15px" }} />

@@ -2,6 +2,12 @@
   padding: 30px;
 }
 
+.container {
+  width: 100%;
+  display: flex;
+  height: calc(100% - 80px);
+}
+
 .section h3 {
   font-size: 0.9rem;
   color: var(--primary-color);
@@ -21,7 +27,7 @@
 
 .slider_box {
   width: 300px;
-  height: 200px;
+  /* height: 200px; */
   background: #222222;
   border-radius: 10px;
   border: 2px solid var(--light-border-color);
@@ -50,4 +56,57 @@
   color: var(--active-light);
   font-size: 0.63rem;
   margin-top: 20px;
+}
+
+.section_1 {
+  width: 60%;
+  /* background: white; */
+}
+
+.section_2 {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid var(--light-border-color);
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 2px solid var(--light-border-color);
+}
+
+.header h4 {
+  color: var(--primary-color);
+  font-size: 0.7rem;
+}
+
+.chat_interface {
+  height: 100%;
+  overflow-y: scroll;
+  flex: 1;
+  padding: 10px;
+}
+
+.chat_interface::-webkit-scrollbar {
+  width: 0px;
+}
+
+.input {
+  border-top: 2px solid var(--light-border-color);
+}
+
+.bubble {
+  margin-bottom: 10px;
+}
+
+.bubble pre {
+  font-size: 17px;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 80%;
+  color: var(--primary-color);
+  white-space: break-spaces;
 }

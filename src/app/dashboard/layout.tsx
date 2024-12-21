@@ -14,6 +14,7 @@ import AddRecord from '@/layouts/AddRecord';
 
 import styles from "../../styles/layout/DashboardLayout.module.css";
 import { useAppContext } from '@/context/AppContext';
+import { useRouter } from 'next/navigation';
 // import { handleUserData } from '@/redux/slice/userSlice';
 // import { useDispatch } from 'react-redux';
 
@@ -24,25 +25,27 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
     // const dispatch = useDispatch()
+    const router = useRouter()
     // useEffect(() => {
     //     authenticateUser()
     // }, [])
     const { createRecord } = useAppContext()
-    const authenticateUser = async () => {
-        try {
-            const user = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/auth`, {
-                method: "GET",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            let data = await user.json()
-            // dispatch(handleUserData(data.user))
-        } catch (err) {
-            console.log(err)
-        }
-    }
+
+    // const authenticateUser = async () => {
+    //     try {
+    //         const user = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/auth`, {
+    //             method: "GET",
+    //             credentials: "include",
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             }
+    //         })
+    //         let data = await user.json()
+    //         // dispatch(handleUserData(data.user))
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
     return (
         <div className={styles.page}>

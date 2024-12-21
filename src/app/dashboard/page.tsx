@@ -20,10 +20,14 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
 
     const [incomeRecords, setIncomeRecords] = useState([])
     const [expenseRecords, setExpenseRecords] = useState([])
+    const [expenseGrowth, setExpenseGrowth] = useState([])
+    const [incomeGrowth, setIncomeGrowth] = useState([])
 
     useEffect(() => {
         fetchIncomes()
         fetchExpenses()
+        fetchIncomeGrowth()
+        fetchExpenseGrowth()
     }, [])
 
     const fetchIncomes = async () => {
@@ -55,6 +59,40 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
             let data = await incomes.json()
             setExpenseRecords(data.data)
             console.log({ data })
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const fetchExpenseGrowth = async () => {
+        try {
+            const expenses = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records/expense-growth`, {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            let data = await expenses.json()
+            console.log({ data })
+            setExpenseGrowth(data.results)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const fetchIncomeGrowth = async () => {
+        try {
+            const income = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records/income-growth`, {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            let data = await income.json()
+            console.log({ data })
+            setIncomeGrowth(data.results)
         } catch (err) {
             console.log(err)
         }
@@ -125,7 +163,7 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
                             <span>Expenses Growth Per Month</span>
                         </div>
 
-                        <BarChartComponent />
+                        <BarChartComponent data={expenseGrowth} />
                     </div>
                 </div>
 
@@ -137,7 +175,7 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
                         </div>
 
                         {/* <BarChartComponent /> */}
-                        <ChartWithCustomAxisColors />
+                        <ChartWithCustomAxisColors data={incomeGrowth} />
                     </div>
                 </div>
 
@@ -146,7 +184,7 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
                         <div className={styles.box_header}>
                             <span>Income Compare to Expenses</span>
                         </div>
-                        <AreaChartComponent />
+                        <AreaChartComponent incomeData={incomeGrowth} expenseData={expenseGrowth} />
                     </div>
                 </div>
             </div>

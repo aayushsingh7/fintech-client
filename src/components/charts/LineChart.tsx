@@ -1,21 +1,32 @@
 "use client"
 
-import React from 'react';
+import React, { FC } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const data = [
-    { name: 'Jan', orders: 400 },
-    { name: 'Feb', orders: 300 },
-    { name: 'Mar', orders: 200 },
-    { name: 'Apr', orders: 278 },
-    { name: 'May', orders: 189 },
-    { name: 'Jun', orders: 239 }
-];
+interface DataPoint {
+    totalAmount: number;
+    year: number;
+    month: number;
+}
 
-const ChartWithCustomAxisColors = () => {
+interface ChartWithCustomAxisColorsProps {
+    data: DataPoint[];
+}
+
+const getMonthName = (month: number): string => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[month - 1];
+};
+
+const ChartWithCustomAxisColors: FC<ChartWithCustomAxisColorsProps> = ({ data }) => {
+    const formattedData = data.map((item) => ({
+        ...item,
+        name: getMonthName(item.month)
+    }));
+
     return (
         <ResponsiveContainer width="100%" height="80%" style={{ position: "relative", left: "-30px" }}>
-            <LineChart data={data}>
+            <LineChart data={formattedData}>
                 <CartesianGrid strokeDasharray="3 3" stroke='#555555' />
                 <XAxis
                     dataKey="name"
@@ -33,7 +44,7 @@ const ChartWithCustomAxisColors = () => {
                 />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="orders" stroke="#82ca9d" />
+                <Line type="monotone" dataKey="totalAmount" name="Income per month" stroke="#82ca9d" />
             </LineChart>
         </ResponsiveContainer>
     );

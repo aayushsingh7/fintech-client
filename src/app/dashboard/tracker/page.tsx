@@ -125,7 +125,7 @@ const Tracker: FC<TrackerProps> = ({ }) => {
                         {
                             incomeRecords.map((record: any) => {
                                 return (
-                                    <div className={styles.box}>
+                                    <div key={Math.random() * 100000} className={styles.box}>
                                         <div className={styles.box_details}>
                                             <h4>{record.title}</h4>
                                             <span>{record.createdAt}</span>
@@ -146,7 +146,7 @@ const Tracker: FC<TrackerProps> = ({ }) => {
                         {
                             expenseRecords.map((record: any) => {
                                 return (
-                                    <div className={styles.box}>
+                                    <div key={Math.random() * 100000} className={styles.box}>
                                         <div className={styles.box_details}>
                                             <h4>{record.title}</h4>
                                             <span>{record.createdAt}</span>
