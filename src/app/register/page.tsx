@@ -11,6 +11,7 @@ interface RegisterPageProps { }
 
 const RegisterPage: FC<RegisterPageProps> = ({ }) => {
     const router = useRouter()
+    const [loading, setLoading] = useState<boolean>(false)
     const [userDetails, setUserDetails] = useState<any>({
         name: "",
         email: "",
@@ -25,6 +26,7 @@ const RegisterPage: FC<RegisterPageProps> = ({ }) => {
     }
 
     const register = async () => {
+        setLoading(true)
         try {
             const registerUser = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/register`, {
                 method: "POST",
@@ -40,10 +42,10 @@ const RegisterPage: FC<RegisterPageProps> = ({ }) => {
             })
             let response = await registerUser.json()
             router.push("/dashboard")
-            console.log(response)
         } catch (err) {
             console.log(err)
         }
+        setLoading(false)
     }
     return (
         <div className={styles.page}>
@@ -53,10 +55,10 @@ const RegisterPage: FC<RegisterPageProps> = ({ }) => {
                     <Input name='name' type='text' onChange={(e) => handleUserInput(e)} placeholder='Enter Your Name' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "20px", background: "var(--secondary-background)", borderRadius: "10px" }} />
                     <Input name='email' type='email' onChange={(e) => handleUserInput(e)} placeholder='Enter Your Email' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "10px", background: "var(--secondary-background)", borderRadius: "10px" }} />
                     <Input name='password' type='password' onChange={(e) => handleUserInput(e)} placeholder='Enter Your Password' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "10px", background: "var(--secondary-background)", borderRadius: "10px" }} />
-                    <Button onClick={register} style={{ fontSize: "0.8rem", background: "var(--active-background)", padding: "15px 30px", marginTop: "40px", borderRadius: "10px", width: "100%" }}>Register</Button>
+                    <Button disabled={loading} onClick={register} style={{ fontSize: "0.8rem", background: "var(--active-background)", padding: "15px 30px", marginTop: "40px", borderRadius: "10px", width: "100%" }}>{loading ? "Registering..." : "Register"}</Button>
                 </div>
             </form>
-            <p>Already have an account? <Link href={"/register"}>Login now</Link></p>
+            <p>Already have an account? <Link href={"/login"}>Login now</Link></p>
         </div>
     )
 }

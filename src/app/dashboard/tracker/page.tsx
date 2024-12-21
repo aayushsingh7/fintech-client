@@ -8,19 +8,25 @@ import PageHeader from '@/layouts/PageHeader'
 import Button from '@/components/ui/Button'
 import { useAppContext } from '@/context/AppContext'
 import calculateTotal from '@/utils/calculateTotal'
+import PriceBox from '@/components/PriceBox'
+import { useRouter } from 'next/navigation'
+import formatDate from '@/utils/formatDate'
 
 interface TrackerProps {
 
 }
 
 const Tracker: FC<TrackerProps> = ({ }) => {
-    const { setCreateRecord, setRecordType, user } = useAppContext()
-    const [incomeRecords, setIncomeRecords] = useState([])
-    const [expenseRecords, setExpenseRecords] = useState([])
+    const { setCreateRecord, setRecordType, setSavingPlanRequired, setDeleteRecordsFunc, user, incomeRecords, setIncomeRecordsFunc, expenseRecords, setExpenseRecordsFunc } = useAppContext()
+    const router = useRouter()
 
     useEffect(() => {
-        fetchIncomes()
-        fetchExpenses()
+        if (incomeRecords.length == 0) {
+            fetchIncomes()
+        }
+        if (expenseRecords.length == 0) {
+            fetchExpenses()
+        }
     }, [])
 
     const fetchIncomes = async () => {
@@ -33,7 +39,7 @@ const Tracker: FC<TrackerProps> = ({ }) => {
                 }
             })
             let data = await incomes.json()
-            setIncomeRecords(data.data)
+            setIncomeRecordsFunc(data.data)
             console.log({ data })
         } catch (err) {
             console.log(err)
@@ -50,7 +56,26 @@ const Tracker: FC<TrackerProps> = ({ }) => {
                 }
             })
             let data = await incomes.json()
-            setExpenseRecords(data.data)
+            setExpenseRecordsFunc(data.data)
+            console.log({ data })
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const deleteRecords = async (id: any, type: string) => {
+        setDeleteRecordsFunc(type, id)
+        try {
+            const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records/delete`, {
+                method: "DELETE",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ recordId: id })
+            })
+            let response = await data.json()
+
             console.log({ data })
         } catch (err) {
             console.log(err)
@@ -59,59 +84,18 @@ const Tracker: FC<TrackerProps> = ({ }) => {
 
     return (
         <Page>
-            <PageHeader heading='Expense Tracker'> <Button onClick={() => { setCreateRecord(true); setRecordType("transaction") }} style={{ padding: "10px 20px", background: "var(--active-background)", fontSize: "0.8rem", borderRadius: "10px" }}>Add New</Button></PageHeader>
+            <PageHeader heading='Expense Tracker'>
+                <div style={{ display: "flex", gap: "10px" }}>
+                    <Button onClick={() => { router.push("/dashboard/learn"); setSavingPlanRequired(true) }} style={{ padding: "10px 20px", background: "var(--secondary-background)", fontSize: "0.8rem", borderRadius: "10px" }}>Create a Saving Plan (AI)</Button>
+                    <Button onClick={() => { setCreateRecord(true); setRecordType("transaction") }} style={{ padding: "10px 20px", background: "var(--active-background)", fontSize: "0.8rem", borderRadius: "10px" }}>Add New</Button>
+                </div>
+            </PageHeader>
             <div className={styles.container}>
                 <div className={styles.summary}>
-                    <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
-                        <div className={styles.box_header}>
-                            <span>Total Amount</span>
-                        </div>
-
-                        <p className={styles.main}>₹ {calculateTotal(incomeRecords)}</p>
-
-                        <div className={styles.box_footer}>
-                            <span>Previous Week</span>
-                            <span style={{ color: "#00df00" }}>+₹240.00</span>
-                        </div>
-                    </div>
-
-                    <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
-                        <div className={styles.box_header}>
-                            <span>Total Remainings</span>
-                        </div>
-
-                        <p className={styles.main}>₹ {calculateTotal(incomeRecords) - calculateTotal(expenseRecords)}</p>
-
-                        <div className={styles.box_footer}>
-                            <span>Previous Week</span>
-                            <span style={{ color: "#00df00" }}>+₹240.00</span>
-                        </div>
-                    </div>
-                    <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
-                        <div className={styles.box_header}>
-                            <span>Total Spent</span>
-                        </div>
-
-                        <p className={styles.main}>₹ {calculateTotal(expenseRecords)}</p>
-
-                        <div className={styles.box_footer}>
-                            <span>Previous Week</span>
-                            <span style={{ color: "#00df00" }}>+₹240.00</span>
-                        </div>
-                    </div>
-
-                    <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
-                        <div className={styles.box_header}>
-                            <span>Savings</span>
-                        </div>
-
-                        <p className={styles.main}>₹ 0</p>
-
-                        <div className={styles.box_footer}>
-                            <span>Previous Week</span>
-                            <span style={{ color: "#00df00" }}>+₹240.00</span>
-                        </div>
-                    </div>
+                    <PriceBox text="Total Amount" amount={calculateTotal(incomeRecords)} />
+                    <PriceBox changeColor={true} income={true} text="Total Remainings" amount={calculateTotal(incomeRecords) - calculateTotal(expenseRecords)} />
+                    <PriceBox changeColor={true} income={false} text="Total Spent" amount={calculateTotal(expenseRecords)} />
+                    <PriceBox text="Savings" amount={0} />
 
                 </div>
             </div>
@@ -125,12 +109,15 @@ const Tracker: FC<TrackerProps> = ({ }) => {
                         {
                             incomeRecords.map((record: any) => {
                                 return (
-                                    <div key={Math.random() * 100000} className={styles.box}>
-                                        <div className={styles.box_details}>
-                                            <h4>{record.title}</h4>
-                                            <span>{record.createdAt}</span>
+                                    <div className={styles.box_container}>
+                                        <div key={Math.random() * 100000} className={styles.box}>
+                                            <div className={styles.box_details}>
+                                                <h4>{record.title}</h4>
+                                                <span>Created on {formatDate(record.createdAt)}</span>
+                                            </div>
+                                            <span className={`${styles.amount} ${record.recordType == "income" ? styles.income : styles.expense}`}> {record.recordType == "income" ? "+" : "-"} ₹{record.amount}</span>
                                         </div>
-                                        <span className={`${styles.amount} ${record.recordType == "income" ? styles.income : styles.expense}`}> {record.recordType == "income" ? "+" : "-"} ₹{record.amount}</span>
+                                        <p onClick={() => deleteRecords(record._id, "income")} className={styles.delete_btn}>Delete Record</p>
                                     </div>
                                 )
                             })
@@ -146,12 +133,15 @@ const Tracker: FC<TrackerProps> = ({ }) => {
                         {
                             expenseRecords.map((record: any) => {
                                 return (
-                                    <div key={Math.random() * 100000} className={styles.box}>
-                                        <div className={styles.box_details}>
-                                            <h4>{record.title}</h4>
-                                            <span>{record.createdAt}</span>
+                                    <div className={styles.box_container}>
+                                        <div key={Math.random() * 100000} className={styles.box}>
+                                            <div className={styles.box_details}>
+                                                <h4>{record.title}</h4>
+                                                <span>Created on {formatDate(record.createdAt)}</span>
+                                            </div>
+                                            <span className={`${styles.amount} ${record.recordType == "income" ? styles.income : styles.expense}`}> {record.recordType == "income" ? "+" : "-"} ₹{record.amount}</span>
                                         </div>
-                                        <span className={`${styles.amount} ${record.recordType == "income" ? styles.income : styles.expense}`}> {record.recordType == "income" ? "+" : "-"} ₹{record.amount}</span>
+                                        <p onClick={() => deleteRecords(record._id, "expense")} className={styles.delete_btn}>Delete Record</p>
                                     </div>
                                 )
                             })

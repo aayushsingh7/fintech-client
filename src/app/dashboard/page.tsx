@@ -9,6 +9,7 @@ import styles from "../../styles/pages/DashboardPage.module.css"
 import { useAppContext } from "@/context/AppContext"
 import { useEffect, useState } from "react"
 import calculateTotal from "@/utils/calculateTotal"
+import PriceBox from "@/components/PriceBox"
 
 
 interface DashboardPageProps {
@@ -16,12 +17,10 @@ interface DashboardPageProps {
 }
 
 const DashboardPage: NextPage<DashboardPageProps> = () => {
-    const { user } = useAppContext()
+    const { user, setExpenseGrowthFunc, setIncomeGrowthFunc, expenseGrowth, incomeGrowth } = useAppContext()
 
     const [incomeRecords, setIncomeRecords] = useState([])
     const [expenseRecords, setExpenseRecords] = useState([])
-    const [expenseGrowth, setExpenseGrowth] = useState([])
-    const [incomeGrowth, setIncomeGrowth] = useState([])
 
     useEffect(() => {
         fetchIncomes()
@@ -75,7 +74,7 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
             })
             let data = await expenses.json()
             console.log({ data })
-            setExpenseGrowth(data.results)
+            setExpenseGrowthFunc(data.results)
         } catch (err) {
             console.log(err)
         }
@@ -92,7 +91,7 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
             })
             let data = await income.json()
             console.log({ data })
-            setIncomeGrowth(data.results)
+            setIncomeGrowthFunc(data.results)
         } catch (err) {
             console.log(err)
         }
@@ -104,7 +103,7 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
                 {/* <div className={styles.seprator}> */}
                 <div className={styles.grid_container}>
 
-                    <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
+                    {/* <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
                         <div className={styles.box_header}>
                             <span>Total Amount</span>
                         </div>
@@ -115,9 +114,13 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
                             <span>Previous Week</span>
                             <span style={{ color: "#00df00" }}>+₹240.00</span>
                         </div>
-                    </div>
+                    </div> */}
+                    <PriceBox text="Total Amount" amount={calculateTotal(incomeRecords)} />
+                    <PriceBox text="Total Remainings" amount={calculateTotal(incomeRecords) - calculateTotal(expenseRecords)} />
+                    <PriceBox text="Total Spent" amount={calculateTotal(expenseRecords)} />
+                    <PriceBox text="Savings" amount={0} />
 
-                    <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
+                    {/* <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
                         <div className={styles.box_header}>
                             <span>Total Remainings</span>
                         </div>
@@ -128,8 +131,8 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
                             <span>Previous Week</span>
                             <span style={{ color: "#00df00" }}>+₹240.00</span>
                         </div>
-                    </div>
-                    <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
+                    </div> */}
+                    {/* <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
                         <div className={styles.box_header}>
                             <span>Total Spent</span>
                         </div>
@@ -140,9 +143,9 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
                             <span>Previous Week</span>
                             <span style={{ color: "#00df00" }}>+₹240.00</span>
                         </div>
-                    </div>
+                    </div> */}
 
-                    <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
+                    {/* <div className={`${styles.summary_box} ${styles.indicator_positive}`}>
                         <div className={styles.box_header}>
                             <span>Savings</span>
                         </div>
@@ -153,7 +156,7 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
                             <span>Previous Week</span>
                             <span style={{ color: "#00df00" }}>+₹240.00</span>
                         </div>
-                    </div>
+                    </div> */}
 
                 </div>
 

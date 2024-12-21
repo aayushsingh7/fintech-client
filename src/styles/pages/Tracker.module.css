@@ -142,3 +142,27 @@
   color: var(--secondary-color);
   font-size: 0.6rem;
 }
+
+.box_container {
+  height: 75px;
+  transition: 0.3s ease-in-out;
+  overflow: hidden;
+  transition-delay: 0.4s;
+}
+
+.box_container:hover {
+  height: 120px;
+}
+
+.delete_btn {
+  padding: 10px;
+  font-size: 16px;
+  background: var(--secondary-background);
+  color: var(--primary-color);
+  text-align: center;
+  cursor: pointer;
+}
+
+.delete_btn:hover {
+  background: rgb(160, 0, 0);
+}

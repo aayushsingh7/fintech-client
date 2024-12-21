@@ -25,7 +25,7 @@ const ChartWithCustomAxisColors: FC<ChartWithCustomAxisColorsProps> = ({ data })
     }));
 
     return (
-        <ResponsiveContainer width="100%" height="80%" style={{ position: "relative", left: "-30px" }}>
+        <ResponsiveContainer width="100%" height="80%" style={{ position: "relative", left: "-20px" }}>
             <LineChart data={formattedData}>
                 <CartesianGrid strokeDasharray="3 3" stroke='#555555' />
                 <XAxis

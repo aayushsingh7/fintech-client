@@ -17,8 +17,9 @@ function getMonthEndDate() {
 }
 
 const AddRecord: FC<AddRecordProps> = ({ }) => {
-    const { setCreateRecord, recordType, user } = useAppContext()
+    const { setCreateRecord, recordType, user, setIncomeRecordsFunc, setExpenseRecordsFunc, setDebtPlansFunc } = useAppContext()
     const [type, setType] = useState<string>("income")
+    const [loading, setLoading] = useState<boolean>(false)
     const [recordDetails, setRecordDetails] = useState<any>({
         title: "",
         amount: 0,
@@ -45,7 +46,7 @@ const AddRecord: FC<AddRecordProps> = ({ }) => {
     }
 
     const craeteNewRecord = async () => {
-
+        setLoading(true)
         const data = recordType == "debt" ? {
             title: recordDetails.title,
             annualIncome: Number(recordDetails.annualIncome),
@@ -59,7 +60,7 @@ const AddRecord: FC<AddRecordProps> = ({ }) => {
             totalDebt: Number(recordDetails.totalDebt),
             currentDebtPaymentPerMonth: Number(recordDetails.currentDebtPaymentPerMonth),
             user: user._id,
-            interest:Number(recordDetails.interest)
+            interest: Number(recordDetails.interest)
         } : {
             title: recordDetails.title,
             description: recordDetails.description,
@@ -68,6 +69,8 @@ const AddRecord: FC<AddRecordProps> = ({ }) => {
             user: user._id,
             month: recordDetails.month
         }
+
+        data.recordType == "income" ? setIncomeRecordsFunc({ ...data, createdAt: new Date().toISOString() }) : setExpenseRecordsFunc({ ...data, createdAt: new Date().toISOString() })
 
         try {
             const createNew = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records/create`, {
@@ -80,9 +83,11 @@ const AddRecord: FC<AddRecordProps> = ({ }) => {
             })
             let response = await createNew.json()
             console.log(response)
+            recordType == "debt" ? setDebtPlansFunc(response.data) : null
         } catch (err) {
             console.log(err)
         }
+        setLoading(false)
     }
 
 
@@ -91,7 +96,7 @@ const AddRecord: FC<AddRecordProps> = ({ }) => {
             <div className={styles.add_record}>
                 <div className={styles.header}>
                     <h4>Add new Record</h4>
-                    <Button onClick={() => setCreateRecord(false)}><AiOutlineClose /></Button>
+                    <Button disabled={recordType == "debt" && loading ? true : false} onClick={() => setCreateRecord(false)}><AiOutlineClose /></Button>
                 </div>
                 <div className={styles.inputs_container}>
                     <Input onChange={(e) => handleUserInput(e)} name='title' inputStyleDark='none' type='text' placeholder='Enter Title' style={{ background: "#222222", borderRadius: "10px", width: "100%", fontSize: "0.7rem", marginBottom: "15px", padding: "15px" }} />
@@ -154,7 +159,7 @@ const AddRecord: FC<AddRecordProps> = ({ }) => {
 
                     }
                 </div>
-                <Button onClick={craeteNewRecord} style={{ padding: "20px", background: "var(--active-background)", fontSize: "0.8rem", borderRadius: "10px" }}>Add Record</Button>
+                <Button disabled={loading} onClick={craeteNewRecord} style={{ padding: "20px", background: "var(--active-background)", fontSize: "0.8rem", borderRadius: "10px" }}>{loading ? "Adding Record..." : "Add Record"}</Button>
             </div>
         </div >
     )

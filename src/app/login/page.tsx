@@ -14,6 +14,7 @@ interface LoginPageProps { }
 
 const LoginPage: FC<LoginPageProps> = ({ }) => {
     const { setUser } = useAppContext()
+    const [loading, setLoading] = useState<boolean>(false)
     const router = useRouter()
     const [userDetails, setUserDetails] = useState<any>({
         email: "",
@@ -28,6 +29,7 @@ const LoginPage: FC<LoginPageProps> = ({ }) => {
     }
 
     const login = async () => {
+        setLoading(true)
         try {
             const loginUser = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/login`, {
                 method: "POST",
@@ -43,10 +45,10 @@ const LoginPage: FC<LoginPageProps> = ({ }) => {
             let response = await loginUser.json()
             setUser(response.user)
             router.push("/dashboard")
-            console.log(response)
         } catch (err) {
             console.log(err)
         }
+        setLoading(false)
     }
 
     return (
@@ -56,7 +58,7 @@ const LoginPage: FC<LoginPageProps> = ({ }) => {
                 <div className={styles.inputs}>
                     <Input name='email' type='email' required onChange={(e) => handleUserInput(e)} placeholder='Enter Your Email' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "20px", background: "var(--secondary-background)", borderRadius: "10px" }} />
                     <Input name='password' type='password' required onChange={(e) => handleUserInput(e)} placeholder='Enter Your Password' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "10px", background: "var(--secondary-background)", borderRadius: "10px" }} />
-                    <Button onClick={login} style={{ fontSize: "0.8rem", background: "var(--active-background)", padding: "15px 30px", marginTop: "40px", borderRadius: "10px", width: "100%" }}>Login</Button>
+                    <Button disabled={loading} onClick={login} style={{ fontSize: "0.8rem", background: "var(--active-background)", padding: "15px 30px", marginTop: "40px", borderRadius: "10px", width: "100%" }}>{loading ? "Please Wait..." : "Login"}</Button>
                 </div>
             </form>
             <p>Doesn't have an account? <Link href={"/register"}>Register now</Link></p>

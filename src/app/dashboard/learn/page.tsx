@@ -1,12 +1,13 @@
 "use client"
 
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import styles from '../../../styles/pages/Learn.module.css'
 import Page from '@/components/Page'
 import PageHeader from '@/layouts/PageHeader'
 import Input from '@/components/ui/Input'
 import { FaUserTie } from "react-icons/fa";
 import Link from 'next/link'
+import { useAppContext } from '@/context/AppContext'
 
 
 interface LearnProps {
@@ -19,22 +20,34 @@ interface MessageType {
 }
 
 const Learn: FC<LearnProps> = ({ }) => {
+    const { incomeGrowth, expenseGrowth, savingPlanRequired, setSavingPlanRequired, incomeRecords, expenseRecords } = useAppContext()
     const [userMessages, setUserMessages] = useState<MessageType[]>([{ role: "assistent", msg: "Hey! how can i help you today?" }])
     const [message, setMessage] = useState<string>("")
+    const [aiLoading, setAiLoading] = useState<boolean>(false)
+    const [permission, setPermission] = useState<boolean>(false)
+    let prompt = `Based on my current income and expense for current month, tell me what is the most sutable amount of savings i can do in order to maximize my savings, please give me response in details for better understanding
+    
+    details:- 
+    Income: ${incomeGrowth[incomeGrowth?.length - 1]?.totalAmount}
+    Expense: ${expenseGrowth[expenseGrowth?.length - 1]?.totalAmount}
+    Debts: Not Considered
+    `
 
     const newMessage = async (e: any) => {
-        if (e.key == "Enter") {
+        if (e.key == "Enter" || permission) {
             const msg = {
                 role: "user",
-                msg: message
+                msg: permission ? prompt : message
             }
 
             setMessage("")
+            setPermission(false)
             setUserMessages((messages: any) => {
                 return [...messages, msg]
             })
 
             try {
+                setAiLoading(true)
                 let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ai/ask`, {
                     method: "POST",
                     credentials: "include",
@@ -56,9 +69,20 @@ const Learn: FC<LearnProps> = ({ }) => {
             } catch (err) {
                 console.log(err)
             }
+            setAiLoading(false)
         }
 
     }
+
+    useEffect(() => {
+        console.log({ savingPlanRequired, prompt, incomeRecords: incomeRecords[incomeRecords.length - 1] })
+        if (savingPlanRequired) {
+            setPermission((val: boolean) => true)
+            setSavingPlanRequired(false)
+            newMessage("")
+        }
+    }, [])
+
     return (
         <Page>
             <PageHeader heading='Learn using AI'>"</PageHeader>
@@ -95,14 +119,14 @@ const Learn: FC<LearnProps> = ({ }) => {
                 <section className={styles.section_2}>
                     <div className={styles.header}>
                         <FaUserTie style={{ marginRight: "15px", color: "var(--primary-color)", fontSize: "20px" }} />
-                        <h4>Ask AI</h4>
+                        <h4 style={{ display: "flex", alignItems: "center" }}>Ask AI  {aiLoading && <div style={{ marginLeft: "10px" }} className="loader"></div>} </h4>
                     </div>
                     <div className={styles.chat_interface}>
                         {
                             userMessages.map((message) => {
                                 return (
                                     <div key={Math.random() * 1000000} className={styles.bubble} style={{ display: "flex", alignContent: "center", justifyContent: message.role == "user" ? "flex-end" : "flex-start" }}>
-                                        <pre style={{ background: message.role == "user" ? "var(--active-background)" : "#222222" }}>
+                                        <pre style={{ background: message.role == "user" ? "var(--active-background)" : "#222222", color: message.role == "user" ? "var( --primary-color-light)" : "var(--primary-color)" }}>
                                             {message.msg}
                                         </pre>
                                     </div>

@@ -15,11 +15,25 @@
   background: var(--primary-background);
 }
 
-.container h3 {
-  font-size: 1rem;
+.logo {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
   margin-bottom: 30px;
   padding: 10px;
   color: var(--primary-color);
+}
+
+.logo p {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.logo svg {
+  color: var(--primary-color);
+  font-size: 25px;
+  margin-right: 10px;
 }
 
 .split_children {

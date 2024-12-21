@@ -28,7 +28,7 @@ const AreaChartComponent: FC<AreaChartComponentProps> = ({ incomeData, expenseDa
     }));
 
     return (
-        <ResponsiveContainer width="100%" height="80%" style={{ position: "relative", left: "-30px" }}>
+        <ResponsiveContainer width="100%" height="80%" style={{ position: "relative", left: "0px" }}>
             <AreaChart
                 data={formattedData}
                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}

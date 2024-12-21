@@ -23,7 +23,7 @@ const BarChartComponent: FC<BarChartComponentProps> = ({ data }) => {
     }));
 
     return (
-        <ResponsiveContainer width="100%" height="100%" style={{ position: "relative", left: "-30px", marginTop: "30px" }}>
+        <ResponsiveContainer width="100%" height="100%" style={{ position: "relative", left: "-10px", marginTop: "30px" }}>
             <BarChart data={formattedData} >
                 <CartesianGrid strokeDasharray="3 3" stroke='#555555' />
                 <XAxis

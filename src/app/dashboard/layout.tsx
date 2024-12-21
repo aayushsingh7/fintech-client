@@ -15,6 +15,7 @@ import AddRecord from '@/layouts/AddRecord';
 import styles from "../../styles/layout/DashboardLayout.module.css";
 import { useAppContext } from '@/context/AppContext';
 import { useRouter } from 'next/navigation';
+import { SiCashapp } from 'react-icons/si';
 // import { handleUserData } from '@/redux/slice/userSlice';
 // import { useDispatch } from 'react-redux';
 
@@ -53,7 +54,10 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
                 createRecord && <AddRecord />
             }
             <nav className={styles.container}>
-                <h3>AppName</h3>
+                <div className={styles.logo}>
+                    <SiCashapp />
+                    <p>FinSphere</p>
+                </div>
                 <div className={styles.split_children}>
                     <ul>
                         <li>
@@ -76,12 +80,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
                             </Link>
                         </li>
 
-                        <li>
-                            <Link href={"/dashboard/investments"}>
-                                <IoBarChartOutline />
-                                <span>Investments</span>
-                            </Link>
-                        </li>
+
 
                         <li>
                             <Link href={"/dashboard/learn"}>
@@ -95,7 +94,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
 
                     <ul>
                         <li>
-                            <Link href={"/dashboard/settings"}>
+                            <Link href={"/dashboard"}>
                                 <IoSettings />
                                 <span>Settings</span>
                             </Link>

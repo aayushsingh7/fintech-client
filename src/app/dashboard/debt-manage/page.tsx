@@ -1,24 +1,25 @@
 "use client"
 
 
-import { FC, useEffect, useState } from 'react'
-import styles from "../../../styles/pages/DebtManage.module.css"
 import Page from '@/components/Page'
-import PageHeader from '@/layouts/PageHeader'
 import Button from '@/components/ui/Button'
-import ChartWithCustomAxisColors from '@/components/charts/LineChart'
 import { useAppContext } from '@/context/AppContext'
+import PageHeader from '@/layouts/PageHeader'
+import formatDate from '@/utils/formatDate'
+import { FC, useEffect } from 'react'
+import styles from "../../../styles/pages/DebtManage.module.css"
 
 interface DebtManageProps {
 
 }
 
 const DebtManage: FC<DebtManageProps> = ({ }) => {
-    const { setCreateRecord, setRecordType, user } = useAppContext()
-    const [debtPlans, setDebtPlans] = useState([])
+    const { setCreateRecord, setRecordType, user, debtPlans, setDebtPlansFunc, setDeleteRecordsFunc } = useAppContext()
 
     useEffect(() => {
-        fetchDebtsPlans()
+        if (!debtPlans || debtPlans?.length == 0) {
+            fetchDebtsPlans()
+        }
     }, [])
 
     const fetchDebtsPlans = async () => {
@@ -31,11 +32,30 @@ const DebtManage: FC<DebtManageProps> = ({ }) => {
                 },
             })
             const data = await debts.json()
-            setDebtPlans(data.data)
+            setDebtPlansFunc(data.data)
         } catch (err) {
             console.log(err)
         }
     }
+
+    const deleteRecords = async (id: any, type: string) => {
+        setDeleteRecordsFunc(type, id)
+        try {
+            const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records/delete`, {
+                method: "DELETE",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ recordId: id })
+            })
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+
+
     return (
         <Page>
             <PageHeader heading='Debt Management'> <Button onClick={() => { setCreateRecord(true); setRecordType("debt") }} style={{ padding: "10px 20px", background: "var(--active-background)", fontSize: "0.8rem", borderRadius: "10px" }}>Start a New Plan</Button></PageHeader>
@@ -53,13 +73,13 @@ const DebtManage: FC<DebtManageProps> = ({ }) => {
                                             <div className={styles.bg} style={{ marginRight: "15px" }}></div>
                                             <div style={{ display: "flex", flexDirection: "column" }}>
                                                 <h4>{debt.title}</h4>
-                                                <span>{debt.createdAt}</span>
+                                                <span>Created on {formatDate(debt.createdAt)}</span>
                                             </div>
                                         </div>
 
                                         <div style={{ display: "flex", gap: "10px" }}>
-                                            <Button style={{ fontSize: "0.6rem", padding: "3px 18px", borderRadius: "10px", border: "2px solid green", color: "#00ce00" }}>Paid for Jan</Button>
-                                            <Button style={{ background: "var(--secondary-background)", fontSize: "0.6rem", padding: "5px 20px", borderRadius: "10px" }}>Expand</Button>
+                                            {/* <Button style={{ fontSize: "0.6rem", padding: "3px 18px", borderRadius: "10px", border: "2px solid green", color: "#00ce00" }}>Paid for Jan</Button> */}
+                                            <Button onClick={() => deleteRecords(debt._id, "debt")} style={{ background: "var(--secondary-background)", fontSize: "0.6rem", padding: "5px 20px", borderRadius: "10px" }}>Delete</Button>
                                         </div>
                                     </div>
                                     <figcaption>
@@ -76,17 +96,17 @@ const DebtManage: FC<DebtManageProps> = ({ }) => {
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>${debt.totalDebt}</td>
+                                                    <td>₹{debt.totalDebt}</td>
                                                     <td>{debt.repaymentPeroid}</td>
-                                                    <td>${debt.annualIncome}</td>
-                                                    <td>${debt.expensePerMonth}</td>
-                                                    <td>${debt.savings}</td>
+                                                    <td>₹{debt.annualIncome}</td>
+                                                    <td>₹{debt.expensePerMonth}</td>
+                                                    <td>₹{debt.savings}</td>
                                                     <td>{debt.interest}%</td>
                                                 </tr>
                                             </tbody>
                                         </table>
 
-                                        <p className={styles.estimation}>Based on above data, the best amount to pay per month is <span>$534.00</span></p>
+                                        <p className={styles.estimation}>Based on above data, the best amount to pay per month is <span>₹{debt.amountToBePayedPerMonth}.00</span></p>
 
 
                                         {/* <section className={styles.charts_details}>
