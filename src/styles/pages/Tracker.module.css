@@ -1,0 +1,144 @@
+.summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.container {
+  padding: 20px;
+}
+
+/* ---------------- */
+
+.summary_box {
+  width: 100%;
+  height: 150px;
+  background: #222222;
+  border: 2px solid var(--light-border-color);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* flex-shrink: 0; */
+}
+/* 
+.indicator_positive {
+  border-bottom: 4px solid #008300;
+}
+
+.indicator_negative {
+  border-bottom: 4px solid #df1e00;
+} */
+
+.no_shrink {
+  flex-shrink: 0;
+}
+
+.box_header {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+}
+
+.box_header span,
+.box_footer span {
+  font-size: 0.52rem;
+  color: var(--secondary-color);
+}
+
+.box_footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.main {
+  color: var(--primary-color);
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.one_box {
+  /* padding: 0px 20px; */
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+}
+/* ------------------------------- */
+
+.transactions {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  padding: 0px 20px 20px 20px;
+}
+
+.seprator {
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  background: #222222;
+  border: 2px solid var(--light-border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  max-height: 500px;
+}
+
+.seprator h3 {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+}
+
+.header {
+  padding: 10px;
+  /* height: 40px; */
+  border-bottom: 2px solid var(--light-border-color);
+}
+
+.transactions_slider {
+  height: calc(100% - 40px);
+  flex: 1;
+  overflow-y: scroll;
+}
+
+/* ------------------------------- */
+/* tracker */
+
+.box {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  align-items: center;
+  border-radius: 10px;
+  /* background: var(--secondary-background); */
+  border-bottom: 2px solid var(--light-border-color);
+}
+.box .amount {
+  font-weight: 600;
+  font-size: 0.7rem;
+}
+
+.income {
+  color: #00d300;
+}
+.expense {
+  color: red;
+}
+
+.box_details {
+  display: flex;
+  flex-direction: column;
+}
+
+.box_details h4 {
+  color: var(--primary-color);
+  font-size: 0.7rem;
+  margin-bottom: 6px;
+}
+
+.box_details span {
+  color: var(--secondary-color);
+  font-size: 0.6rem;
+}

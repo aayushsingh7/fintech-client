@@ -1,0 +1,38 @@
+.page {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-background);
+  height: 100dvh;
+  flex-direction: column;
+  width: 100vw;
+}
+
+.page form {
+  width: 600px;
+  padding: 60px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.page form h2 {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+.inputs {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.page p {
+  color: var(--primary-color);
+  margin-top: 30px;
+  font-size: 0.8rem;
+}
+
+.page p a {
+  color: var(--active-light);
+}

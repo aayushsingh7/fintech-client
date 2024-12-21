@@ -1,0 +1,31 @@
+.main {
+  background: var(--primary-background);
+}
+
+.hero_section {
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}
+
+.hero_section h1 {
+  width: 70%;
+  text-align: center;
+}
+
+.hero_section h1 span {
+  color: var(--active-background);
+  /* text-decoration: wavy; */
+}
+
+.hero_section p {
+  color: var(--secondary-color);
+  text-align: center;
+  width: 70%;
+  font-size: 1rem;
+  margin-top: 40px;
+}

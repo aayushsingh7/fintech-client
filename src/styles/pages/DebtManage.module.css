@@ -1,0 +1,77 @@
+.container {
+  padding: 30px;
+}
+
+.container h2 {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+}
+
+.box {
+  border: 2px solid var(--light-border-color);
+}
+
+.box_header {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+
+  border-radius: 10px;
+}
+
+.box_header h4 {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  /* margin-bottom: 6px; */
+}
+
+.box_header span {
+  color: var(--secondary-color);
+  font-size: 0.6rem;
+}
+
+.bg {
+  background: #555555;
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+}
+
+.box figcaption {
+  padding: 0px 20px 20px 20px;
+}
+
+.box table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  color: var(--primary-color);
+  font-size: 0.65rem;
+}
+
+.box table td,
+.box table th {
+  /* width: 50%; */
+  border: 3px solid var(--light-border-color);
+  text-align: left;
+  padding: 13px;
+}
+
+.box thead {
+  background-color: var(--secondary-background);
+}
+
+.estimation {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  margin-top: 20px;
+  /* font-weight: 600; */
+}
+
+.estimation span {
+  color: #00ce00;
+  font-weight: 600;
+  font-size: 1rem;
+}

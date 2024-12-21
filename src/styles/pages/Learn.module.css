@@ -1,0 +1,52 @@
+.section {
+  padding: 30px;
+}
+
+.section h3 {
+  font-size: 0.9rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.slider {
+  width: 100%;
+  overflow-x: scroll;
+  display: flex;
+}
+
+.slider::-webkit-scrollbar {
+  height: 0px;
+}
+
+.slider_box {
+  width: 300px;
+  height: 200px;
+  background: #222222;
+  border-radius: 10px;
+  border: 2px solid var(--light-border-color);
+  padding: 15px;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.slider_box:hover {
+  border: 2px solid var(--active-background);
+}
+
+.slider_box h5 {
+  color: var(--primary-color);
+  font-size: 0.7rem;
+}
+
+.slider_box p {
+  color: var(--secondary-color);
+  font-size: 0.6rem;
+  line-height: 0.8rem;
+  margin: 10px 0px;
+}
+
+.slider_box span {
+  color: var(--active-light);
+  font-size: 0.63rem;
+  margin-top: 20px;
+}
