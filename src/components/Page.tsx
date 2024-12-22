@@ -13,9 +13,9 @@ interface PageProps {
 const Page: FC<PageProps> = ({ children }) => {
     const { user } = useAppContext()
     const router = useRouter()
-    // useEffect(() => {
-    //     if (!user._id) router.push("/login")
-    // }, [])
+    useEffect(() => {
+        if (!user._id) router.push("/login")
+    }, [])
     return (
         <div className="dashboard_page">
             {children}

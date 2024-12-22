@@ -23,15 +23,17 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
     const [expenseRecords, setExpenseRecords] = useState([])
 
     useEffect(() => {
-        fetchIncomes()
-        fetchExpenses()
-        fetchIncomeGrowth()
-        fetchExpenseGrowth()
+        if (user._id) {
+            fetchIncomes()
+            fetchExpenses()
+            fetchIncomeGrowth()
+            fetchExpenseGrowth()
+        }
     }, [])
 
     const fetchIncomes = async () => {
         try {
-            const incomes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records?userId=6765c95740ce07da88eae032&&recordType=income`, {
+            const incomes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records?userId=${user._id}&&recordType=income`, {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -48,7 +50,7 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
 
     const fetchExpenses = async () => {
         try {
-            const incomes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records?userId=6765c95740ce07da88eae032&&recordType=expense`, {
+            const incomes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records?userId=${user._id}&&recordType=expense`, {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -65,7 +67,7 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
 
     const fetchExpenseGrowth = async () => {
         try {
-            const expenses = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records/expense-growth`, {
+            const expenses = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records/expense-growth?userId=${user._id}`, {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -82,7 +84,7 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
 
     const fetchIncomeGrowth = async () => {
         try {
-            const income = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records/income-growth`, {
+            const income = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records/income-growth?userId=${user._id}`, {
                 method: "GET",
                 credentials: "include",
                 headers: {

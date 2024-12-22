@@ -8,7 +8,7 @@ import Input from '@/components/ui/Input'
 import { FaUserTie } from "react-icons/fa";
 import Link from 'next/link'
 import { useAppContext } from '@/context/AppContext'
-
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 interface LearnProps {
 
@@ -24,7 +24,7 @@ const Learn: FC<LearnProps> = ({ }) => {
     const [userMessages, setUserMessages] = useState<MessageType[]>([{ role: "assistent", msg: "Hey! how can i help you today?" }])
     const [message, setMessage] = useState<string>("")
     const [aiLoading, setAiLoading] = useState<boolean>(false)
-    const [permission, setPermission] = useState<boolean>(false)
+    // const [permission, setPermission] = useState<boolean>(false)
     let prompt = `Based on my current income and expense for current month, tell me what is the most sutable amount of savings i can do in order to maximize my savings, please give me response in details for better understanding
     
     details:- 
@@ -34,14 +34,14 @@ const Learn: FC<LearnProps> = ({ }) => {
     `
 
     const newMessage = async (e: any) => {
-        if (e.key == "Enter" || permission) {
+        if (e.key == "Enter" || savingPlanRequired) {
             const msg = {
                 role: "user",
-                msg: permission ? prompt : message
+                msg: savingPlanRequired ? prompt : message
             }
 
             setMessage("")
-            setPermission(false)
+            setSavingPlanRequired(false)
             setUserMessages((messages: any) => {
                 return [...messages, msg]
             })
@@ -75,11 +75,9 @@ const Learn: FC<LearnProps> = ({ }) => {
     }
 
     useEffect(() => {
-        console.log({ savingPlanRequired, prompt, incomeRecords: incomeRecords[incomeRecords.length - 1] })
         if (savingPlanRequired) {
-            setPermission((val: boolean) => true)
-            setSavingPlanRequired(false)
             newMessage("")
+            setSavingPlanRequired(false)
         }
     }, [])
 
@@ -126,9 +124,9 @@ const Learn: FC<LearnProps> = ({ }) => {
                             userMessages.map((message) => {
                                 return (
                                     <div key={Math.random() * 1000000} className={styles.bubble} style={{ display: "flex", alignContent: "center", justifyContent: message.role == "user" ? "flex-end" : "flex-start" }}>
-                                        <pre style={{ background: message.role == "user" ? "var(--active-background)" : "#222222", color: message.role == "user" ? "var( --primary-color-light)" : "var(--primary-color)" }}>
-                                            {message.msg}
-                                        </pre>
+                                        <MarkdownPreview style={{ background: message.role == "user" ? "var(--active-background)" : "#222222", color: message.role == "user" ? "var( --primary-color-light)" : "var(--primary-color)", padding: "10px", maxWidth: "80%", borderRadius: "10px" }}
+                                            source={message.msg}
+                                        />
                                     </div>
                                 )
                             })

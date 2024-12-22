@@ -18,20 +18,25 @@ interface TrackerProps {
 
 const Tracker: FC<TrackerProps> = ({ }) => {
     const { setCreateRecord, setRecordType, setSavingPlanRequired, setDeleteRecordsFunc, user, incomeRecords, setIncomeRecordsFunc, expenseRecords, setExpenseRecordsFunc } = useAppContext()
+    const [incomeLoading, setIncomeLoading] = useState<boolean>(false)
+    const [expenseLoading, setExpenseLoading] = useState<boolean>(false)
     const router = useRouter()
 
     useEffect(() => {
-        if (incomeRecords.length == 0) {
-            fetchIncomes()
-        }
-        if (expenseRecords.length == 0) {
-            fetchExpenses()
+        if (user._id) {
+            if (incomeRecords.length == 0) {
+                fetchIncomes()
+            }
+            if (expenseRecords.length == 0) {
+                fetchExpenses()
+            }
         }
     }, [])
 
     const fetchIncomes = async () => {
+        setIncomeLoading(true)
         try {
-            const incomes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records?userId=6765c95740ce07da88eae032&&recordType=income`, {
+            const incomes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records?userId=${user._id}&&recordType=income`, {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -44,11 +49,13 @@ const Tracker: FC<TrackerProps> = ({ }) => {
         } catch (err) {
             console.log(err)
         }
+        setIncomeLoading(false)
     }
 
     const fetchExpenses = async () => {
+        setExpenseLoading(true)
         try {
-            const incomes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records?userId=6765c95740ce07da88eae032&&recordType=expense`, {
+            const incomes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records?userId=${user._id}&&recordType=expense`, {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -61,6 +68,7 @@ const Tracker: FC<TrackerProps> = ({ }) => {
         } catch (err) {
             console.log(err)
         }
+        setExpenseLoading(false)
     }
 
     const deleteRecords = async (id: any, type: string) => {
@@ -105,48 +113,54 @@ const Tracker: FC<TrackerProps> = ({ }) => {
                     <div className={styles.header}>
                         <h3>Incomes</h3>
                     </div>
-                    <div className={styles.transactions_slider}>
-                        {
-                            incomeRecords.map((record: any) => {
-                                return (
-                                    <div className={styles.box_container}>
-                                        <div key={Math.random() * 100000} className={styles.box}>
-                                            <div className={styles.box_details}>
-                                                <h4>{record.title}</h4>
-                                                <span>Created on {formatDate(record.createdAt)}</span>
+                    {
+                        incomeLoading ? <div className="loader_2" style={{ marginTop: "20px" }}></div> :
+                            <div className={styles.transactions_slider}>
+                                {
+                                    incomeRecords.map((record: any) => {
+                                        return (
+                                            <div className={styles.box_container}>
+                                                <div key={Math.random() * 100000} className={styles.box}>
+                                                    <div className={styles.box_details}>
+                                                        <h4>{record.title}</h4>
+                                                        <span>Created on {formatDate(record.createdAt)}</span>
+                                                    </div>
+                                                    <span className={`${styles.amount} ${record.recordType == "income" ? styles.income : styles.expense}`}> {record.recordType == "income" ? "+" : "-"} ₹{record.amount}</span>
+                                                </div>
+                                                <p onClick={() => deleteRecords(record._id, "income")} className={styles.delete_btn}>Delete Record</p>
                                             </div>
-                                            <span className={`${styles.amount} ${record.recordType == "income" ? styles.income : styles.expense}`}> {record.recordType == "income" ? "+" : "-"} ₹{record.amount}</span>
-                                        </div>
-                                        <p onClick={() => deleteRecords(record._id, "income")} className={styles.delete_btn}>Delete Record</p>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                    }
                 </div>
 
                 <div className={styles.seprator}>
                     <div className={styles.header}>
                         <h3>Expenses</h3>
                     </div>
-                    <div className={styles.transactions_slider}>
-                        {
-                            expenseRecords.map((record: any) => {
-                                return (
-                                    <div className={styles.box_container}>
-                                        <div key={Math.random() * 100000} className={styles.box}>
-                                            <div className={styles.box_details}>
-                                                <h4>{record.title}</h4>
-                                                <span>Created on {formatDate(record.createdAt)}</span>
+                    {
+                        expenseLoading ? <div className="loader_2" style={{ marginTop: "20px" }}></div> :
+                            <div className={styles.transactions_slider}>
+                                {
+                                    expenseRecords.map((record: any) => {
+                                        return (
+                                            <div className={styles.box_container}>
+                                                <div key={Math.random() * 100000} className={styles.box}>
+                                                    <div className={styles.box_details}>
+                                                        <h4>{record.title}</h4>
+                                                        <span>Created on {formatDate(record.createdAt)}</span>
+                                                    </div>
+                                                    <span className={`${styles.amount} ${record.recordType == "income" ? styles.income : styles.expense}`}> {record.recordType == "income" ? "+" : "-"} ₹{record.amount}</span>
+                                                </div>
+                                                <p onClick={() => deleteRecords(record._id, "expense")} className={styles.delete_btn}>Delete Record</p>
                                             </div>
-                                            <span className={`${styles.amount} ${record.recordType == "income" ? styles.income : styles.expense}`}> {record.recordType == "income" ? "+" : "-"} ₹{record.amount}</span>
-                                        </div>
-                                        <p onClick={() => deleteRecords(record._id, "expense")} className={styles.delete_btn}>Delete Record</p>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                    }
                 </div>
 
             </section>

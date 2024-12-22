@@ -103,6 +103,10 @@
   overflow-y: scroll;
 }
 
+.transactions_slider::-webkit-scrollbar {
+  width: 0px;
+}
+
 /* ------------------------------- */
 /* tracker */
 
