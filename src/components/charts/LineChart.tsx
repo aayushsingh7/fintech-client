@@ -42,7 +42,8 @@ const ChartWithCustomAxisColors: FC<ChartWithCustomAxisColorsProps> = ({ data })
                     domain={[0, 600]}
                     fontSize="10px"
                 />
-                <Tooltip />
+                <Tooltip
+                    formatter={(value: any) => [`₹${value.toLocaleString()}`, 'Income']} />
                 <Legend />
                 <Line type="monotone" dataKey="totalAmount" name="Income per month" stroke="#82ca9d" />
             </LineChart>

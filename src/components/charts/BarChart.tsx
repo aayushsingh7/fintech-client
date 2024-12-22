@@ -42,7 +42,7 @@ const BarChartComponent: FC<BarChartComponentProps> = ({ data }) => {
                 />
                 <Legend />
                 <Tooltip
-                    formatter={(value: any) => [`$${value.toLocaleString()}`, 'Amount']}
+                    formatter={(value: any) => [`₹${value.toLocaleString()}`, 'Expenses']}
                     labelStyle={{ color: 'black' }}
                 />
                 <Bar dataKey="totalAmount" name="Expenses per month" label={{ position: 'top', fontSize: "10px", fill: "var(--primary-color)" }} fill="#82ca9d" />
