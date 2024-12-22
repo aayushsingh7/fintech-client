@@ -62,6 +62,11 @@ const LoginPage: FC<LoginPageProps> = ({ }) => {
         <div className={styles.page}>
             <form onSubmit={(e) => e.preventDefault()}>
                 <h2>Welcome Back🎉</h2>
+                <div className={styles.banner}>
+                    <h4>🚀Please use these credentials to login</h4>
+                    <p>Email: d@gmail.com</p>
+                    <p>Password: d</p>
+                </div>
                 <div className={styles.inputs}>
                     <Input name='email' type='email' required onChange={(e) => handleUserInput(e)} placeholder='Enter Your Email' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "20px", background: "var(--secondary-background)", borderRadius: "10px" }} />
                     <Input name='password' type='password' required onChange={(e) => handleUserInput(e)} placeholder='Enter Your Password' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "10px", background: "var(--secondary-background)", borderRadius: "10px" }} />
