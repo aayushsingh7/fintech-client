@@ -6,12 +6,15 @@ import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useAppContext } from '@/context/AppContext'
 
 interface RegisterPageProps { }
 
 const RegisterPage: FC<RegisterPageProps> = ({ }) => {
     const router = useRouter()
+    const { setUser } = useAppContext()
     const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string>("")
     const [userDetails, setUserDetails] = useState<any>({
         name: "",
         email: "",
@@ -41,9 +44,15 @@ const RegisterPage: FC<RegisterPageProps> = ({ }) => {
                 })
             })
             let response = await registerUser.json()
-            router.push("/dashboard")
-        } catch (err) {
+            if (registerUser.status === 201) {
+                setUser(response.user)
+                router.push("/dashboard")
+            } else {
+                setError(response.message)
+            }
+        } catch (err: any) {
             console.log(err)
+            setError(err.message)
         }
         setLoading(false)
     }
@@ -55,6 +64,9 @@ const RegisterPage: FC<RegisterPageProps> = ({ }) => {
                     <Input name='name' type='text' onChange={(e) => handleUserInput(e)} placeholder='Enter Your Name' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "20px", background: "var(--secondary-background)", borderRadius: "10px" }} />
                     <Input name='email' type='email' onChange={(e) => handleUserInput(e)} placeholder='Enter Your Email' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "10px", background: "var(--secondary-background)", borderRadius: "10px" }} />
                     <Input name='password' type='password' onChange={(e) => handleUserInput(e)} placeholder='Enter Your Password' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "10px", background: "var(--secondary-background)", borderRadius: "10px" }} />
+                    {
+                        error && <p style={{ color: "red", fontSize: "15px", textAlign: "center" }}>{error}</p>
+                    }
                     <Button disabled={loading} onClick={register} style={{ fontSize: "0.8rem", background: "var(--active-background)", padding: "15px 30px", marginTop: "40px", borderRadius: "10px", width: "100%" }}>{loading ? "Registering..." : "Register"}</Button>
                 </div>
             </form>

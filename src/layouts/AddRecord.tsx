@@ -70,7 +70,15 @@ const AddRecord: FC<AddRecordProps> = ({ }) => {
             month: recordDetails.month
         }
 
-        data.recordType == "income" ? setIncomeRecordsFunc({ ...data, createdAt: new Date().toISOString() }) : setExpenseRecordsFunc({ ...data, createdAt: new Date().toISOString() })
+        if (data.recordType !== "debt") {
+            if (data.recordType == "income") {
+                setIncomeRecordsFunc({ ...data, createdAt: new Date().toISOString() })
+            }
+            else if (data.recordType == "expense") {
+                setExpenseRecordsFunc({ ...data, createdAt: new Date().toISOString() })
+            }
+            setCreateRecord(false)
+        }
 
         try {
             const createNew = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/records/create`, {
@@ -82,8 +90,11 @@ const AddRecord: FC<AddRecordProps> = ({ }) => {
                 body: JSON.stringify(data)
             })
             let response = await createNew.json()
-            console.log(response)
-            recordType == "debt" ? setDebtPlansFunc(response.data) : null
+            if (recordType == "debt") {
+                setDebtPlansFunc(response.data)
+                setCreateRecord(false)
+            }
+
         } catch (err) {
             console.log(err)
         }

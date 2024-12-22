@@ -16,6 +16,7 @@ const LoginPage: FC<LoginPageProps> = ({ }) => {
     const { setUser } = useAppContext()
     const [loading, setLoading] = useState<boolean>(false)
     const router = useRouter()
+    const [error, setError] = useState<string>("")
     const [userDetails, setUserDetails] = useState<any>({
         email: "",
         password: ""
@@ -30,6 +31,7 @@ const LoginPage: FC<LoginPageProps> = ({ }) => {
 
     const login = async () => {
         setLoading(true)
+        setError("")
         try {
             const loginUser = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/login`, {
                 method: "POST",
@@ -43,10 +45,15 @@ const LoginPage: FC<LoginPageProps> = ({ }) => {
                 })
             })
             let response = await loginUser.json()
-            setUser(response.user)
-            router.push("/dashboard")
-        } catch (err) {
+            if (loginUser.status == 200) {
+                setUser(response.user)
+                router.push("/dashboard")
+            } else {
+                setError(response.message)
+            }
+        } catch (err: any) {
             console.log(err)
+            setError(err.message)
         }
         setLoading(false)
     }
@@ -58,6 +65,9 @@ const LoginPage: FC<LoginPageProps> = ({ }) => {
                 <div className={styles.inputs}>
                     <Input name='email' type='email' required onChange={(e) => handleUserInput(e)} placeholder='Enter Your Email' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "20px", background: "var(--secondary-background)", borderRadius: "10px" }} />
                     <Input name='password' type='password' required onChange={(e) => handleUserInput(e)} placeholder='Enter Your Password' inputStyleDark="none" style={{ padding: "15px 20px", marginTop: "10px", background: "var(--secondary-background)", borderRadius: "10px" }} />
+                    {
+                        error && <p style={{ color: "red", fontSize: "15px", textAlign: "center" }}>{error}</p>
+                    }
                     <Button disabled={loading} onClick={login} style={{ fontSize: "0.8rem", background: "var(--active-background)", padding: "15px 30px", marginTop: "40px", borderRadius: "10px", width: "100%" }}>{loading ? "Please Wait..." : "Login"}</Button>
                 </div>
             </form>
