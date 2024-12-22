@@ -17,7 +17,6 @@ const Navbar: FC<NavbarProps> = ({ }) => {
                 </div>
                 <ul>
                     <li><Link href={"/"}>Home</Link></li>
-                    <li><Link href={"/dashboard"}>Dashboard</Link></li>
                     <li><Link href={"#features"}>Features</Link></li>
                     <li><Link href={"/login"} className={styles.high}>Login/Register</Link></li>
                 </ul>
