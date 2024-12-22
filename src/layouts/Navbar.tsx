@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import styles from '@/styles/Layout/Navbar.module.css'
+import styles from '../styles/Layout/Navbar.module.css'
 import Link from 'next/link'
 import { SiCashapp } from "react-icons/si";
 
